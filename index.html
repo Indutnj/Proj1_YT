@@ -1,0 +1,141 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>YouTube</title>
+
+
+    <link rel="stylesheet" href="style.css" />
+    
+    
+  </head>
+  <body>
+    <!-----nav bar-->
+<nav class="navbar">
+  <div class="toggle-btn">
+    <span></span>
+    <span></span>
+    <span></span>
+
+  </div>
+  <img src="images/menu.png" class="menu" alt="">
+ <!--<img src="images/play.png" class="play" alt="">-->
+  <img src="images/logo.png" class="logo" alt=""><span style="font-size:15px;">YouTube </span><sup><span  style="font-size:10px;"> IN</span></sup>
+  <div class="search-box">
+    <input type="text" class="search-bar" placeholder="search">
+    <button class="search-btn"><img src="images/search.png"></button>
+   
+     
+      <input type="text" class="search-bar" placeholder="search Channel">
+    
+      <button class="search-btn" onclick="getchannellist();" id="search_text" ><img src="images/search.png"></button>
+   
+  </div>
+  <div class="user-options">
+    <img src="images/upload.png" class="icon" alt=""><br>
+    <img src="images/notify.jpg" class="icon" alt=""><br>
+    <img src="images/more info.png" class="icon" alt=""><br>
+    <div class="user-dp">
+      <img src="images/utubeicon.png" alt="">
+
+    </div>
+
+
+  </div>
+
+  
+</nav>
+<!-----sidebar---->
+ <div class="sidebar">
+  <a href="#" class="links active"><img src="images/images.png"><p>Home</p></a>
+  <a href="#" class="links"><img src="images/explore.png"><p>Explore</p></a>
+  <a href="#"class="links"><img src="images/subscription.png"><p>Subscription</p></a>
+  <hr class="seperator">
+  <a href="#"class="links"><img src="images/library.png"><p>Library</p></a>
+  <a href="#"class="links"><img src="images/history.png"><p>History</p></a>
+  <a href="#"class="links"><img src="images/playlist.png"><p>Playlist</p></a>
+  <a href="#"class="links"><img src="images/watchlater.png"><p>Watchlater</p></a>
+  <a href="#"class="links"><img src="images/like.png"><p>like</p></a>
+</div> 
+<!---filters-->
+<div class="filters">
+      <button class="filter-options active">all</button>
+      <button class="filter-options">Cooking</button>
+      <button class="filter-options">Tamil Songs</button>
+      <button class="filter-options">Javascript</button>
+      <button class="filter-options">Funny</button>
+      <button class="filter-options">Ocean</button>
+      <button class="filter-options">World</button>
+      <button class="filter-options">About Sun</button>
+      <button class="filter-options">Trending</button>
+
+</div>
+<!-- videos -->
+<div class="video-container">
+  
+  <div class="row">
+    <div class="col" id="chl_lst">
+        <div class="container">
+            <div class="row">
+                <div class="col" id="chl_dtls">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+function getchannellist()
+{
+    const search_text=document.getElementById("search_text").value;
+    console.log(search_text);
+    fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${search_text}&key=AIzaSyD6fszDOxun7jMZXbS9AMeso9Pwqsl-IDM`)
+    .then((response) => response.json())
+    .then((res) => {
+        data = res;
+        console.log(data)
+        //console.log(data.items.length)
+  
+            console.log('kind -->'+ data.kind );
+            console.log('regionCode -->'+ data.regionCode );
+            console.log('publishedAt -->'+ data.items[0].snippet.publishedAt );
+
+            console.log('title -->'+ data.items[0].snippet.title );
+            console.log('description -->'+ data.items[0].snippet.description);
+            console.log('publishTime -->'+ data.items[0].snippet.publishTime);
+
+            console.log('thumbnails -->'+ data.items[0].snippet.thumbnails.default.url);
+            console.log('videoId -->'+ data.items[1].id.videoId);
+            let data_pack='';
+            for(let i=0;i<data.items.length;i++)
+            {
+                if(data.items[i].id.kind === 'youtube#video')
+                {
+                    const url = 'https://www.youtube.com/embed/'+data.items[i].id.videoId;
+                    data_pack += ` <iframe width="220" height="115" src="${url}" frameborder="0" allowfullscreen></iframe><br>`;
+                }
+            }
+           
+            
+         document.getElementById("chl_lst").innerHTML =data_pack;
+         //chl_dtls
+          const data_pack2=`Kind:${data.kind}|Region Code:${data.regionCode}|publishedAt:${data.items[0].snippet.publishedAt}|title:${data.items[0].snippet.title}|description:${data.items[0].snippet.description}|publishTime:${data.items[0].snippet.publishTime}`;
+         document.getElementById("chl_dtls").innerHTML =data_pack2; 
+       
+
+
+
+
+
+    });
+}
+</script>
+<div class="container">
+ 
+</div>
+    
+    <script src="script.js"></script>
+    
+    
+  </body>
+</html>
